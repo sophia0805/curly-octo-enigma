@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react'
-import AddIcon from '@material-ui/icons/Add';
+import AddIcon from '@mui/icons-material/Add';
 import '../../styles/SidebarItem.css';
 
 import firebase from 'firebase/compat/app';
@@ -8,8 +8,9 @@ import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import { storage, db } from '../../firebase'
 
-import { makeStyles } from '@material-ui/core/styles';
-import Modal from '@material-ui/core/Modal';
+import { styled } from '@mui/material';
+import Modal from '@mui/material/Modal';
+
 function getModalStyle() {
     return {
         top: `50%`,
@@ -18,7 +19,7 @@ function getModalStyle() {
     };
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = styled((theme) => ({
     paper: {
         position: 'absolute',
         width: 400,

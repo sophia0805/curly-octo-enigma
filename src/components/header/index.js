@@ -2,11 +2,11 @@ import React from 'react'
 import '../../styles/Header.css'
 
 import storageLogo from '../../pics/storage.png'
-import SearchIcon from '@material-ui/icons/Search';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import AppsIcon from '@material-ui/icons/Apps';
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
-import SettingsIcon from '@material-ui/icons/Settings';
+import SearchIcon from '@mui/icons-material/Search';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import AppsIcon from '@mui/icons-material/Apps';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 const index = ( {userPhoto}) => {
   return (

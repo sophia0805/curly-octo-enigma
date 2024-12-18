@@ -3,13 +3,13 @@ import NewFile from './NewFile'
 import SidebarItem from './SidebarItem'
 import '../../styles/Sidebar.css'
 
-import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
-import ImportantDevicesIcon from '@material-ui/icons/ImportantDevices';
-import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
-import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
-import StarBorderIcon from '@material-ui/icons/StarBorder';
-import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
-import StorageIcon from '@material-ui/icons/InsertDriveFile';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import ImportantDevicesIcon from '@mui/icons-material/ImportantDevices';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import QueryBuilderIcon from '@mui/icons-material/QueryBuilder';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import StorageIcon from '@mui/icons-material/InsertDriveFile';
 
 const index = () => {
   return (

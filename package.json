@@ -24,11 +24,16 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
-    "@material-ui/core": "^4.12.4",
-    "@material-ui/icons": "^4.11.3",
-    "@mui/material": "^6.2.0",
+    "@mui/icons-material": "^6.2.1",
+    "@mui/material": "^6.2.1",
     "firebase": "^11.1.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "scheduler": "^0.25.0",
+    "source-map-loader": "^5.0.0"
+  },
+  "devDependencies": {
+    "@testing-library/user-event": "^14.5.2",
+    "schedule": "^0.4.0"
   }
 }
