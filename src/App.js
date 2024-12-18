@@ -2,6 +2,10 @@ import {useState} from 'react';
 import './App.css';
 import Header from './components/header';
 import Sidebar from './components/sidebar';
+import FileDisplay from './components/files/FileDisplay.js';
+import './styles/FileDisplay.css'
+import { FileManagerProvider } from './components/FileManagerContext.js';
+
 function App() {
   const [user, setUser] = useState({
     displayName: "David Rakosi",
@@ -12,10 +16,15 @@ function App() {
   })
 
   return (
-    <div className="App">
-      <Header userPhoto={user.photoURL}/>
-      <Sidebar/>
-    </div>
+    <FileManagerProvider>
+      <div className="App">
+        <Header userPhoto={user.photoURL}/>
+        <Sidebar/>
+        <main className="app__main">
+          <FileDisplay />
+        </main>
+      </div>
+    </FileManagerProvider>
   );
 }
 
