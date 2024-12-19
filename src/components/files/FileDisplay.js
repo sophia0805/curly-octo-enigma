@@ -33,7 +33,7 @@ import {
   Delete as DeleteIcon,
   Star as StarIcon,
   StarBorder as StarBorderIcon
-} from '@mui/icons-material';
+} from '@mui/material';
 
 const FileDisplay = () => {
   const { 
