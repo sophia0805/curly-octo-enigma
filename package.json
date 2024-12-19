@@ -1,4 +1,7 @@
 {
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ],
   "name": "curly-octo-enigma",
   "version": "0.1.0",
   "private": true,
