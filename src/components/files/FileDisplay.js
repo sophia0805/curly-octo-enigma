@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useFileManager } from '../FileManagerContext';
+import { db } from '../../firebase';
 import {
   Box,
   Table,
@@ -27,58 +29,70 @@ import {
   Image as ImageIcon,
   PictureAsPdf as PdfIcon,
   Download as DownloadIcon,
-  Delete as DeleteIcon
+  Delete as DeleteIcon,
+  Star as StarIcon,
+  StarBorder as StarBorderIcon
 } from '@mui/icons-material';
-import { db } from '../../firebase';
 
 const FileDisplay = () => {
-  const [files, setFiles] = useState([]);
+  const { 
+    files, 
+    searchQuery,
+    currentView,  // Make sure this is properly destructured
+    starredFiles,
+    toggleStarred,
+    moveToTrash,
+    restoreFromTrash,
+    permanentlyDelete
+  } = useFileManager();
+  
   const [view, setView] = useState('list');
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedFile, setSelectedFile] = useState(null);
-
-  useEffect(() => {
-    const unsubscribe = db.collection('myFiles')
-      .orderBy('timestamp', 'desc')
-      .onSnapshot(snapshot => {
-        setFiles(
-          snapshot.docs.map(doc => ({
-            id: doc.id,
-            data: doc.data()
-          }))
-        );
-      });
-
-    return () => unsubscribe();
-  }, []);
+  const [menuState, setMenuState] = useState({
+    anchorEl: null,
+    selectedFile: null
+  });
 
   const handleMenuClick = (event, file) => {
-    setAnchorEl(event.currentTarget);
-    setSelectedFile(file);
+    event.stopPropagation();
+    setMenuState({
+      anchorEl: event.currentTarget,
+      selectedFile: file
+    });
   };
 
   const handleMenuClose = () => {
-    setAnchorEl(null);
-    setSelectedFile(null);
+    setMenuState({
+      anchorEl: null,
+      selectedFile: null
+    });
   };
 
-  const handleDownload = (file) => {
-    const link = document.createElement('a');
-    link.href = file.data.data;
-    link.download = file.data.name;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    handleMenuClose();
-  };
+  const handleFileAction = (action) => {
+    const { selectedFile } = menuState;
+    if (!selectedFile) return;
 
-  const handleDelete = async (file) => {
-    try {
-      await db.collection('myFiles').doc(file.id).delete();
-      handleMenuClose();
-    } catch (error) {
-      console.error('Error deleting file:', error);
+    switch (action) {
+      case 'download':
+        const link = document.createElement('a');
+        link.href = selectedFile.data.data;
+        link.download = selectedFile.data.name;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        break;
+      case 'trash':
+        moveToTrash(selectedFile);
+        break;
+      case 'restore':
+        restoreFromTrash(selectedFile.id);
+        break;
+      case 'delete':
+        permanentlyDelete(selectedFile.id);
+        break;
+      default:
+        break;
     }
+    handleMenuClose();
   };
 
   const getFileIcon = (fileType) => {
@@ -123,13 +137,22 @@ const FileDisplay = () => {
                 <Box display="flex" alignItems="center" gap={1}>
                   {getFileIcon(file.data.type)}
                   {file.data.name}
+                  <IconButton 
+                    size="small" 
+                    onClick={() => toggleStarred(file.id)}
+                  >
+                    {starredFiles.has(file.id) ? <StarIcon color="warning" /> : <StarBorderIcon />}
+                  </IconButton>
                 </Box>
               </TableCell>
               <TableCell>{file.data.type}</TableCell>
               <TableCell>{formatFileSize(file.data.size)}</TableCell>
               <TableCell>{formatDate(file.data.uploadDate)}</TableCell>
               <TableCell align="right">
-                <IconButton onClick={(e) => handleMenuClick(e, file)}>
+                <IconButton
+                  onClick={(e) => handleMenuClick(e, file)}
+                  aria-label="more options"
+                >
                   <MoreVertIcon />
                 </IconButton>
               </TableCell>
@@ -156,10 +179,17 @@ const FileDisplay = () => {
                   <Typography variant="subtitle1" noWrap sx={{ maxWidth: 150 }}>
                     {file.data.name}
                   </Typography>
+                  <IconButton 
+                    size="small" 
+                    onClick={() => toggleStarred(file.id)}
+                  >
+                    {starredFiles.has(file.id) ? <StarIcon color="warning" /> : <StarBorderIcon />}
+                  </IconButton>
                 </Box>
-                <IconButton 
-                  size="small" 
+                <IconButton
+                  size="small"
                   onClick={(e) => handleMenuClick(e, file)}
+                  aria-label="more options"
                 >
                   <MoreVertIcon />
                 </IconButton>
@@ -180,7 +210,13 @@ const FileDisplay = () => {
   return (
     <Box p={3}>
       <Box display="flex" justifyContent="space-between" mb={3}>
-        <Typography variant="h5">My Files</Typography>
+        <Typography variant="h5">
+          {currentView === 'myDrive' && 'My Drive'}
+          {currentView === 'starred' && 'Starred'}
+          {currentView === 'recent' && 'Recent'}
+          {currentView === 'bin' && 'Bin'}
+          {searchQuery && ` - Search results for "${searchQuery}"`}
+        </Typography>
         <ButtonGroup variant="outlined">
           <Tooltip title="List view">
             <Button 
@@ -201,19 +237,42 @@ const FileDisplay = () => {
         </ButtonGroup>
       </Box>
 
-      {view === 'list' ? <ListView /> : <GridView />}
+      {files.length === 0 && (
+        <Typography variant="body1" color="textSecondary" align="center" py={4}>
+          {searchQuery 
+            ? `No files found matching "${searchQuery}"`
+            : currentView === 'starred'
+            ? 'No starred files'
+            : currentView === 'bin'
+            ? 'Bin is empty'
+            : 'No files'}
+        </Typography>
+      )}
+
+      {files.length > 0 && (view === 'list' ? <ListView /> : <GridView />)}
 
       <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
+        anchorEl={menuState.anchorEl}
+        open={Boolean(menuState.anchorEl)}
         onClose={handleMenuClose}
       >
-        <MenuItem onClick={() => handleDownload(selectedFile)}>
+        <MenuItem onClick={() => handleFileAction('download')}>
           <DownloadIcon sx={{ mr: 1 }} /> Download
         </MenuItem>
-        <MenuItem onClick={() => handleDelete(selectedFile)}>
-          <DeleteIcon sx={{ mr: 1 }} /> Delete
-        </MenuItem>
+        {currentView === 'bin' ? (
+          <>
+            <MenuItem onClick={() => handleFileAction('restore')}>
+              <FileIcon sx={{ mr: 1 }} /> Restore
+            </MenuItem>
+            <MenuItem onClick={() => handleFileAction('delete')}>
+              <DeleteIcon sx={{ mr: 1 }} /> Delete Forever
+            </MenuItem>
+          </>
+        ) : (
+          <MenuItem onClick={() => handleFileAction('trash')}>
+            <DeleteIcon sx={{ mr: 1 }} /> Move to Bin
+          </MenuItem>
+        )}
       </Menu>
     </Box>
   );

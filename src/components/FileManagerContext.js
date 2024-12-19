@@ -103,10 +103,13 @@ export const FileManagerProvider = ({ children }) => {
 
   const permanentlyDelete = async (fileId) => {
     try {
+      // Delete from Firestore
       await db.collection('myFiles').doc(fileId).delete();
+      // Remove from deletedFiles state
       setDeletedFiles(prev => prev.filter(f => f.id !== fileId));
     } catch (error) {
-      console.error('Error deleting file:', error);
+      console.error('Error deleting file permanently:', error);
+      throw error;
     }
   };
 
@@ -124,6 +127,7 @@ export const FileManagerProvider = ({ children }) => {
     permanentlyDelete
   };
 
+  
   return (
     <FileManagerContext.Provider value={value}>
       {children}
