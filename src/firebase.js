@@ -5,6 +5,7 @@ import 'firebase/compat/storage';
 
 
 const firebaseConfig = {
+  databaseURL: `https://${process.env.REACT_APP_PROJECTID}.firebaseio.com`,
   apiKey: process.env.REACT_APP_API_KEY,
   authDomain: process.env.REACT_APP_AUTHDOMAIN,
   projectId: process.env.REACT_APP_PROJECTID,
