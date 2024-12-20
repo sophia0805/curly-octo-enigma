@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/firestore';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
 import { db } from '../firebase';
 
 const FileManagerContext = createContext();
@@ -13,7 +13,6 @@ export const FileManagerProvider = ({ children }) => {
   const [starredFiles, setStarredFiles] = useState(new Set());
   const [deletedFiles, setDeletedFiles] = useState([]);
 
-  // Fetch files from Firestore
   useEffect(() => {
     const unsubscribe = db.collection('myFiles')
       .orderBy('timestamp', 'desc')
@@ -30,18 +29,15 @@ export const FileManagerProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
-  // Filter files based on search query and current view
   const filterFiles = (allFiles, query, view) => {
     let filtered = allFiles;
 
-    // Apply search filter
     if (query) {
       filtered = filtered.filter(file =>
         file.data.name.toLowerCase().includes(query.toLowerCase())
       );
     }
 
-    // Apply view filter
     switch (view) {
       case 'myDrive':
         filtered = filtered.filter(file => !file.isDeleted);
@@ -65,7 +61,6 @@ export const FileManagerProvider = ({ children }) => {
     setFilteredFiles(filtered);
   };
 
-  // Update filters when dependencies change
   useEffect(() => {
     filterFiles(files, searchQuery, currentView);
   }, [files, searchQuery, currentView, starredFiles, deletedFiles]);
@@ -103,9 +98,7 @@ export const FileManagerProvider = ({ children }) => {
 
   const permanentlyDelete = async (fileId) => {
     try {
-      // Delete from Firestore
       await db.collection('myFiles').doc(fileId).delete();
-      // Remove from deletedFiles state
       setDeletedFiles(prev => prev.filter(f => f.id !== fileId));
     } catch (error) {
       console.error('Error deleting file permanently:', error);

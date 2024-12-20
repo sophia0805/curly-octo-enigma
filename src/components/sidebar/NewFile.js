@@ -131,16 +131,13 @@ const NewFile = () => {
     try {
       setUploading(true);
       
-      // Upload files sequentially to maintain consistent progress
       for (let i = 0; i < selectedFiles.length; i++) {
         const file = selectedFiles[i];
         setUploadProgress(prev => ({ ...prev, [i]: 25 }));
 
-        // Convert file to base64
         const base64File = await convertToBase64(file);
         setUploadProgress(prev => ({ ...prev, [i]: 50 }));
 
-        // Create file metadata
         const fileData = {
           name: file.name,
           type: file.type,
@@ -152,7 +149,6 @@ const NewFile = () => {
 
         setUploadProgress(prev => ({ ...prev, [i]: 75 }));
 
-        // Save to Firestore
         await db.collection('myFiles').add(fileData);
         setUploadProgress(prev => ({ ...prev, [i]: 100 }));
       }
