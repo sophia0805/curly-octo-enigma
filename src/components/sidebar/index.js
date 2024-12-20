@@ -1,5 +1,5 @@
 import React from 'react';
-import { useFileManager } from '../../components/FileManagerContext.js';
+import { useFileManager } from '../FileManagerContext.js';
 import NewFile from './NewFile';
 import SidebarItem from './SidebarItem';
 import '../../styles/Sidebar.css';
@@ -12,7 +12,7 @@ import StarBorderIcon from '@mui/icons-material/StarBorder';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import StorageIcon from '@mui/icons-material/InsertDriveFile';
 
-const index = () => {
+const Sidebar = () => {
   const { currentView, handleViewChange } = useFileManager();
 
   const sidebarItems = [
@@ -47,4 +47,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Sidebar;

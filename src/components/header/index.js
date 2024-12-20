@@ -8,7 +8,7 @@ import AppsIcon from '@mui/icons-material/Apps';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import SettingsIcon from '@mui/icons-material/Settings';
 
-const index = ({ userPhoto }) => {
+const Header = ({ userPhoto }) => {
   const { searchQuery, handleSearch } = useFileManager();
 
   const handleSearchChange = (e) => {
@@ -45,4 +45,4 @@ const index = ({ userPhoto }) => {
   );
 };
 
-export default index;
+export default Header;

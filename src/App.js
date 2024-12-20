@@ -1,5 +1,4 @@
 import {useState} from 'react';
-import './App.css';
 import Header from './components/header';
 import Sidebar from './components/sidebar';
 import FileDisplay from './components/files/FileDisplay.js';
@@ -18,7 +17,7 @@ function App() {
 
   return (
     <FileManagerProvider>
-      <div className="App">
+       <div className="App">
         <Header userPhoto={user.photoURL}/>
         <Sidebar/>
         <main className="app__main">
