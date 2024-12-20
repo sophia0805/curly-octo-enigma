@@ -22,4 +22,12 @@ firebase.firestore().settings({ experimentalForceLongPolling: true });
 
 const storage = firebase.storage();
 
+useEffect(() => {
+  const unloadCallback = () => {firebase.app().delete()}
+  window.addEventListener("beforeunload", unloadCallback);
+  return async () => {
+    window.removeEventListener("beforeunload", unloadCallback);
+  }
+}, [])
+
 export {auth, db, storage};
