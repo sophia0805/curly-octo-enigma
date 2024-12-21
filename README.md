@@ -1,5 +1,7 @@
 i followed this tutorial: [yt](https://www.youtube.com/watch?v=ljuCH6_jrYE&t=5948s)
 - I didn't use firebase storage (only the db) since it costs money and reworked the UI.
+
+UPLOADED DOCUMENTS ARE SHARED WITH EVERYONE
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
