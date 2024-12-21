@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/curly-octo-enigma/static/css/main.4fa663c0.css",
+    "main.js": "/curly-octo-enigma/static/js/main.b0cccac5.js",
+    "static/media/storage.png": "/curly-octo-enigma/static/media/storage.3a67e3966a58fe7a1d44.png",
+    "index.html": "/curly-octo-enigma/index.html",
+    "main.4fa663c0.css.map": "/curly-octo-enigma/static/css/main.4fa663c0.css.map",
+    "main.b0cccac5.js.map": "/curly-octo-enigma/static/js/main.b0cccac5.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4fa663c0.css",
+    "static/js/main.b0cccac5.js"
+  ]
+}
